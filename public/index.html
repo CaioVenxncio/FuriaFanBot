@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FURIA FanBot</title>
+  <!-- Fonte Orbitron -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+    body {
+      background: radial-gradient(circle, #111, #000);
+      color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #121212;
+      padding: 30px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 0 20px #fcd53522;
+      border: 1px solid #fcd53555;
+      animation: fadeIn 1s ease-in-out;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #fcd535;
+      margin-bottom: 5px;
+    }
+    p {
+      font-size: 1rem;
+      color: #ccc;
+    }
+    .chatbox {
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+      height: 320px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #333;
+    }
+    .mensagem {
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background-color: #292929;
+      color: #fff;
+    }
+    button {
+      padding: 12px 20px;
+      background-color: #fcd535;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #e6c22f;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="https://upload.wikimedia.org/wikipedia/pt/f/f9/Furia_Esports_logo.png" alt="FURIA Logo" class="logo">
+      <h1>FURIA FanBot</h1>
+      <p>Seu canal direto com o universo da FURIA CS:GO</p>
+    </header>
+
+    <div class="chatbox" id="chatbox"><!-- Mensagens aparecerão aqui --></div>
+
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Digite um comando... Ex: /jogadores">
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("user-input");
+    const chatbox = document.getElementById("chatbox");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      adicionarMensagem("👤 Você", msg);
+      input.value = "";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        adicionarMensagem("🤖 FanBot", data.reply || "❌ Erro ao responder.");
+      } catch (err) {
+        adicionarMensagem("🤖 FanBot", "❌ Erro ao comunicar com o servidor.");
+        console.error(err);
+      }
+    });
+
+    function adicionarMensagem(autor, texto) {
+      const div = document.createElement("div");
+      div.className = "mensagem";
+      div.innerHTML = `<strong>${autor}:</strong><br>${texto.replace(/\n/g, '<br>')}`;
+      chatbox.appendChild(div);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
