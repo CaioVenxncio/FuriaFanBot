@@ -5,7 +5,7 @@ Chatbot interativo para fãs de CS:GO da **FURIA Esports** usando OpenRouter (GP
 ## 🎯 Funcionalidades
 
 - Responde perguntas sobre o time de CS:GO da FURIA (história, jogadores, resultados, campeonatos).
-- Comando `/jogadores` para listar o roster atual.
+- Faça a pergunta que quiser sobre o time de CS:GO da FURIA
 - Deploy de front-end estático e back-end via funções API no Vercel.
 
 ## 📂 Estrutura do Repositório
