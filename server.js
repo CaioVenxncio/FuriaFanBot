@@ -1,4 +1,4 @@
-// server.js
+
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
@@ -7,15 +7,15 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 1) Health-check para testar se o servidor está no dto
+
 app.get("/api/ping", (req, res) => {
   res.json({ ok: true, msg: "pong" });
 });
 
-// 2) Logs iniciais
+
 console.log("🔑 OPENAI_API_KEY presente?", !!process.env.OPENAI_API_KEY);
 
-// 3) Servir front-end estático
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
@@ -47,7 +47,7 @@ app.post("/api/chat", async (req, res) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "HTTP-Referer": "http://localhost:3000", // seu domínio local
+          "HTTP-Referer": "http://localhost:3000", 
           "X-Title": "FURIA Chatbot"
         }
       }
